@@ -28,6 +28,21 @@ function startRecording() {
 
     var constraints = { audio: true, video:false }
 
+		// 滝沢により追加 Using Audio Constraints With getUserMedia()
+		// var constraints = {
+		//     audio: {
+		//         sampleRate: 48000,
+		//         channelCount: 2,
+		//         volume: 1.0
+		//     },
+		//     video: true
+		// }
+		// navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+		//     /* use the stream */
+		// }).catch(function(err) {
+		//     /* handle the error */
+		// });
+
  	/*
     	Disable the record button until we get a success or fail from getUserMedia()
 	*/
@@ -122,7 +137,8 @@ function createDownloadLink(blob) {
 	var link = document.createElement('a');
 
 	//name of .wav file to use during upload and download (without extendion)
-	var filename = new Date().toISOString();
+	// var filename = new Date().toISOString();
+	var filename = new Date().toLocaleString();
 
 	//add controls to the <audio> element
 	au.controls = true;
@@ -155,8 +171,15 @@ function createDownloadLink(blob) {
 		  };
 		  var fd=new FormData();
 		  fd.append("audio_data",blob, filename);
-		  xhr.open("POST","upload.php",true);
+
+
+			xhr.open("POST","http://localhost/upload.php",true);
+			//xhr.open("POST","upload.php",true);
+			// xhr.open("POST","http://localhost:5000/webapp",true);
+			// /Applications/MAMP/htdocs ←なんでここがlocalhost/upload.phpなの？
 		  xhr.send(fd);
+			console.log(xhr.response);
+
 	})
 	li.appendChild(document.createTextNode (" "))//add a space in between
 	li.appendChild(upload)//add the upload link to li
